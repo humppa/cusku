@@ -7,20 +7,21 @@ module.exports = {
   entry: './app/index.js',
 
   module: {
-
-    preLoaders: [ {
-      test: /\.jsx?$/,
-      loader: 'source-map',
-      exclude: /node_modules/,
-      include: path.resolve(__dirname, 'app')
-    } ],
-
-    loaders: [ {
-      test: /\.jsx?$/,
-      loader: 'babel',
-      exclude: /node_modules/,
-      include: path.resolve(__dirname, 'app')
-    } ]
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: 'source-map-loader',
+        enforce: 'pre',
+        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'app')
+      },
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'app')
+      }
+    ],
   },
 
   output: {

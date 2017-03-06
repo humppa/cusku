@@ -1,0 +1,84 @@
+/* display = 1600x900 1280x720
+ * tablet  =  600x960
+ * phone   =  384x640  360x640
+ */
+
+html {
+  font-family: 'Open Sans', sans-serif;
+  box-sizing: border-box;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+}
+
+nav {
+  display: none;
+  float: left;
+  width: 25%;
+  height: 100vh;
+  background: #abc;
+}
+
+main {
+  height: 100vh;
+  overflow: auto;
+  background: #def;
+}
+main:after {
+  content: ' ';
+  display: block;
+  height: 3rem;
+}
+
+input {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 2.4rem;
+  background: #bae;
+  border: solid 1px black;
+}
+
+li {
+  list-style: none;
+}
+
+nav ul {
+  padding: 1rem;
+}
+
+nav li {
+  font-family: 'Roboto Mono', sans-serif;
+}
+
+nav li a {
+  text-decoration: none;
+}
+
+main ul {
+  padding: 0 1rem;
+}
+
+main ul li {
+  margin-top: 1rem;
+  padding: 0.333rem;
+  background: white;
+  border: dotted 1px #bae;
+}
+
+@media (min-width: 920px) {
+  nav {
+    display: block;
+  }
+  input {
+    width: 75%;
+    height: 2rem;
+  }
+}
