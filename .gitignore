@@ -1,3 +1,12 @@
+# Ignore misc and temp files
 __*
+*.sqlite
+
+# Avoid committing dependencies
 node_modules
+
+# Skip dynamically generated files
 /static/cusku.*
+
+# Secret should be kept away from version control
+/config.yaml

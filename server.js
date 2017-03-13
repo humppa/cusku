@@ -15,9 +15,11 @@ var GStrategy  = require('passport-google-oauth').OAuth2Strategy;
 var app        = express();
 var server     = require('http').Server(app);
 var io         = require('socket.io')(server);
-var lib        = require('./lib/lib');
+var sqlite     = require('./lib/sqlite');
+var util       = require('./lib/util');
 
-var Conf = lib.readConfig();
+var DB = {};
+var Conf = util.readConfig();
 
 var Session = session({
   resave: false,
@@ -28,7 +30,7 @@ var Session = session({
 var User = {
   validate: function(profile, callback) {
     console.log("validate()")
-    lib.D(profile);
+    util.D(profile);
     var key = profile.id || false;
 
     if (!key) {
@@ -50,15 +52,26 @@ var User = {
 
 passport.serializeUser(function(user, done) {
   console.log('serializeUser()');
-  lib.D(user);
-  done(null, user);
+  DB.storeUser(user, done);
 });
 
 passport.deserializeUser(function(user, done) {
   console.log('deserializeUser()');
-  lib.D(user);
-  done(null, user);
+  DB.fetchUser(user, done);
 });
+
+passport.use(new FBStrategy(
+  {
+    clientID: Conf.facebook_oauth.id,
+    clientSecret: Conf.facebook_oauth.secret,
+    callbackURL: Conf.facebook_oauth.callback
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function() {
+      return done(null, profile);
+    });
+  }
+));
 
 passport.use(new GStrategy(
   {
@@ -93,13 +106,15 @@ app.get('/', function(req, res) {
   }
 
   console.log('/ req.user');
-  lib.D(req.user);
+  util.D(req.user);
+  /*
   if (req.session) {
     console.log('/ session');
-    lib.D(req.session);
+    util.D(req.session);
   }
+  */
 
-  res.sendFile(path.resolve(__dirname, 'static', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'index.html'));
 });
 
 app.get('/login', function(req, res) {
@@ -123,7 +138,7 @@ app.get('/auth/google',
     console.log('/auth/google');
     if (req.user) {
       console.log('/auth/google: we have user');
-      lib.D(req.user);
+      util.D(req.user);
     }
     res.redirect(303, '/');
   }
@@ -132,7 +147,7 @@ app.get('/auth/google',
 io.on('connection', function(socket) {
   console.log('io: connection event');
   if (socket) {
-    lib.D(socket);
+    console.log(socket.id);
   }
   else {
     console.log('io: no socket');
@@ -140,11 +155,20 @@ io.on('connection', function(socket) {
 
   socket.on('message', function(msg) {
     console.log('msg:');
-    lib.D(msg);
+    util.D(msg);
     io.emit('message', msg);
   });
 });
 
-server.listen(Conf.server.port, function() {
-  console.log('Server listening on port', Conf.server.port);
+sqlite(Conf.database, function(err, dbo) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+
+  DB = dbo;
+
+  server.listen(Conf.server.port, function() {
+    console.log('Cusku service started on port', Conf.server.port);
+  });
 });

@@ -1,0 +1,38 @@
+/* look.css for #cusku */
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #222;
+}
+
+nav {
+  background: #abc;
+}
+
+main {
+  background: #def;
+}
+
+input {
+  padding: 1rem;
+  background: #bae;
+  border: solid 1px black;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5rem;
+}
+
+nav li {
+}
+
+nav li a {
+}
+
+main ul {
+}
+
+main ul li {
+  background: white;
+  border: dotted 1px #bae;
+}
