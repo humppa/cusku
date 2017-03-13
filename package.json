@@ -14,7 +14,10 @@
     "lint": "eslint app",
     "production": "webpack --optimize-minimize",
     "start": "node server.js",
-    "test": "echo \"Tests successfully completed <3\" && exit 0"
+    "test": "echo \"See Dockerfile for details about testing\" && exit 0"
+  },
+  "engines": {
+    "node": ">=6.5.0"
   },
   "dependencies": {
     "body-parser": "^1.16.0",
